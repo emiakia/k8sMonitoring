@@ -39,6 +39,7 @@ To support the deployment on Amazon EKS, the following add-ons are enabled:
 
 The following sections provide step-by-step guidance for deploying and managing each component.
 
+![App Diagram](images/myDiagram.jpg "Application Architecture")
 
 
 # Kubernetes Cluster Deployment
