@@ -21,6 +21,7 @@ The deployment is managed via Helm charts, ensuring repeatability and efficiency
 4. **Monitoring**:
    - Custom Golang application monitoring pod lifecycle events.
    - Logs events such as pod creation, deletion, and updates in real-time.
+   - The Docker image for this application is built with GitHub Actions after each push, and the image is then pushed to the GitHub Package Repository. The deployment pulls the image from the repository.
 
 5. **Helm Chart Management**:
    - All components deployed using Helm for consistency and scalability.
@@ -290,3 +291,87 @@ To delete the deployment, you can run the following command:
    ```
 
 This will remove the Nginx web server and associated resources from the demo namespace.
+
+
+# Golang Application Monitoring on Kubernetes
+
+This repository provides a setup for monitoring a Golang application using Kubernetes and Helm. It includes configuration for accessing AWS and EKS resources, pulling Docker images from a private GitHub repository, and deploying the monitoring system to Kubernetes.
+
+## Prerequisites
+
+Before deploying the monitoring system, ensure you have the following:
+
+- **Kubernetes Cluster** (EKS or other)
+- **kubectl** command-line tool installed and configured for your cluster
+- **Helm** installed on your local machine
+- AWS Access Key and Secret Key for interacting with AWS services
+- A valid GitHub Container Registry token for pulling Docker images from a private repository
+
+## Steps
+
+### 1. Create Secrets for AWS and EKS Access
+
+We need to store the AWS credentials and EKS configuration in Kubernetes secrets.
+
+#### AWS Credentials Secret
+Store your AWS Access Key and Secret Key in a secret.
+
+```bash
+kubectl create secret generic awssecret \
+  --from-literal=AWS_ACCESS_KEY_ID=your-access-key-id \
+  --from-literal=AWS_SECRET_ACCESS_KEY=your-secret-access-key \
+  -n demo
+
+
+EKS Configuration Secret
+Store your kubeconfig file for accessing EKS resources.
+
+bash
+Copy code
+kubectl create secret generic myrootsecret \
+  --from-file=config=/root/.kube/config \
+  -n demo
+2. Create a Docker Registry Secret for GitHub Container Registry
+If you need to pull Docker images from a private GitHub Container Registry, create a secret to authenticate.
+
+bash
+Copy code
+kubectl create secret docker-registry ghcr-secret \
+  --docker-server=ghcr.io \
+  --docker-username=<your-github-username> \
+  --docker-password=<your-token> \
+  --docker-email=<your-email> \
+  -n demo
+Replace <your-github-username>, <your-token>, and <your-email> with your GitHub credentials.
+
+3. Deploy the Monitoring System using Helm
+Ensure your values.yaml contains the correct configurations for the monitoring setup (including image names, environment variables, etc.). Then, install the Helm chart:
+
+bash
+Copy code
+helm install -f values.yaml -n demo mymonitoring .
+This will deploy your monitoring application to the demo namespace in your Kubernetes cluster.
+
+4. Verify the Deployment
+After deployment, you can check the status of your pods to ensure everything is running correctly.
+
+Check Pods
+bash
+Copy code
+kubectl get pod -n demo
+Check Logs
+To troubleshoot or verify that the application is running as expected, check the logs of the deployed pods:
+
+bash
+Copy code
+kubectl logs -f <pod-name> -n demo
+Replace <pod-name> with the actual pod name.
+
+
+
+### Explanation:
+- The **Prerequisites** section lists the requirements for running the monitoring setup.
+- The **Steps** section breaks down how to create necessary secrets for AWS/EKS access, Docker registry, and how to install the Helm chart.
+- **Verifying Deployment** includes commands to check the status and logs of the deployed application.
+- **Troubleshooting** provides tips for debugging issues during the deployment.
+
