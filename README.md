@@ -367,8 +367,6 @@ Copy code
 kubectl logs -f <pod-name> -n demo
 Replace <pod-name> with the actual pod name.
 
-
-
 ### Explanation:
 - The **Prerequisites** section lists the requirements for running the monitoring setup.
 - The **Steps** section breaks down how to create necessary secrets for AWS/EKS access, Docker registry, and how to install the Helm chart.
