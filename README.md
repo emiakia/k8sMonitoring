@@ -213,10 +213,7 @@ Then, follow the same steps to log in to MariaDB and verify that the test databa
    show databases;
    use test;
    select * from t1;
-
 You should see the data inserted in the first pod selected in the second pod.
-
-
 
 # Nginx Web Server Deployment
 
