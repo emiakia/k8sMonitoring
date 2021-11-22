@@ -5,13 +5,13 @@ FROM golang:1.23 AS builder
 WORKDIR /app
 
 # Copy go.mod and go.sum files for dependency resolution
-COPY go.mod go.sum ./
+COPY k8s-mon-golang-app/go.mod k8s-mon-golang-app/go.sum ./
 
 # Download and cache the dependencies
 RUN go mod download
 
 # Copy the application source code
-COPY *.go ./ 
+COPY k8s-mon-golang-app/*.go ./ 
 
 # Build the application binary with static linking
 RUN CGO_ENABLED=0 GOOS=linux go build -o k8s-monitoring-app
