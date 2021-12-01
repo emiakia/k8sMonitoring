@@ -167,3 +167,52 @@ To begin, install Helm by following the official installation instructions for y
 
    You should see three pods named `data-mydbcluster-mariadb-[0..2]`.
 
+### Verifying MariaDB Cluster and Data Consistency
+
+To verify your MariaDB cluster setup and ensure that data is consistent across nodes, follow these steps:
+
+1. **Connect to the First Node (Pod) in the Cluster:**
+   Use the following `kubectl exec` command to access the first MariaDB node:
+
+   ```bash
+   kubectl exec -it -n demo data-mydbcluster-mariadb-0 -- bash
+
+2. **Login to MariaDB: Once inside the pod, log in to the MariaDB instance with the root credentials:**
+
+   ```bash
+    mysql -u${MYSQL_ROOT_USERNAME} -p${MYSQL_ROOT_PASSWORD}
+
+3. **Verify Databases: After logging in, check the existing databases with the following command:**
+
+   ```bash
+   show databases;
+
+4. **Create a Test Database: Create a new database to test the cluster's functionality:**
+
+   ```bash
+   create database test;
+5. **reate a Table and Insert Data: Switch to the test database, create a table, and insert a sample record:**
+
+   ```bash
+   use test;
+   create table t1 (id integer);
+   insert into t1 values(1);
+6. **Exit the Pod: To exit the MariaDB shell, use Ctrl+D. To exit the pod shell, type:**
+
+   ```bash
+   exit
+
+7. **Verify Data on Other Pods: To ensure data is replicated across the cluster, repeat the above steps on another MariaDB pod in the cluster. First, connect to the second pod:**
+
+   ```bash
+   kubectl exec -it -n demo data-mydbcluster-mariadb-1 -- bash
+Then, follow the same steps to log in to MariaDB and verify that the test database and its data exist.
+
+   ```bash
+   mysql -u${MYSQL_ROOT_USERNAME} -p${MYSQL_ROOT_PASSWORD}
+   show databases;
+   use test;
+   select * from t1;
+
+   You should see the data inserted in the first pod selected in the second pod.
+
