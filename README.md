@@ -16,7 +16,7 @@ The deployment is managed via Helm charts, ensuring repeatability and efficiency
 3. **Web Server Deployment**:
    - Multi-replica web server setup using Nginx.
    - Custom web server configuration mounted to pods.
-   - A variable updated in an init container which show a custom value.
+   - A variable updated in an init container which shows a custom value.
 
 4. **Monitoring**:
    - Custom Golang application monitoring pod lifecycle events.
@@ -37,4 +37,133 @@ To support the deployment on Amazon EKS, the following add-ons are enabled:
 ---
 
 The following sections provide step-by-step guidance for deploying and managing each component.
+
+
+
+# Kubernetes Cluster Deployment
+
+## EKS Cluster Setup
+
+1. **Configure AWS CLI**  
+   Set up AWS CLI using the provided Access Key ID and Secret Access Key with sufficient privileges:
+   ```bash
+   aws configure
+   ```
+
+2. **Clone the Repository**  
+   Clone the repository containing the Terraform configuration for the EKS cluster:
+   ```bash
+   git clone https://github.com/emiakia/aws_eks_provider_simple
+   cd aws_eks_provider_simple
+   ```
+
+3. **Initialize Terraform**  
+   Initialize the Terraform configuration:
+   ```bash
+   terraform init
+   ```
+
+4. **Plan the Deployment**  
+   Review the resources Terraform will create:
+   ```bash
+   terraform plan
+   ```
+
+5. **Apply the Terraform Configuration**  
+   Deploy the EKS cluster by applying the configuration:
+   ```bash
+   terraform apply
+   ```
+
+   Wait for several minutes until the cluster creation completes.
+
+6. **Verify Cluster Creation**  
+   After deployment, verify the cluster with the following command:
+   ```bash
+   aws eks list-clusters
+   ```
+
+7. **Update kubeconfig**  
+   Set the kubeconfig to interact with the new EKS cluster:
+   ```bash
+   aws eks update-kubeconfig --region <region> --name <cluster-name>
+   ```
+
+8. **Verify Connectivity**  
+   Ensure the Kubernetes cluster is up and running by checking the nodes:
+   ```bash
+   kubectl get nodes
+   ```
+
+   The cluster is now ready for further steps.
+
+## Clean Up (Post-Demo)
+
+After the demo or testing, run the following command to avoid incurring extra costs:
+```bash
+terraform destroy
+```
+
+## Database Deployment
+
+In this section, we will deploy a MariaDB instance using KubeDB, which simplifies managing databases on Kubernetes.
+
+### 1. Install Helm
+To begin, install Helm by following the official installation instructions for your environment:  
+[Helm Installation Guide](https://helm.sh/docs/intro/install/)
+
+### 2. Install KubeDB
+
+1. Add the KubeDB Helm chart repository:
+   ```bash
+   helm repo add appscode https://charts.appscode.com/stable/
+   helm repo update
+   ```
+
+2. Install the KubeDB Operator:
+   ```bash
+   helm install kubedb-operator appscode/kubedb --version v2024.8.21 --namespace kubedb --create-namespace --set-file global.license=/root/license.txt
+   ```
+
+   The `license.txt` file must be obtained from the AppsCode License Server:
+   - Visit the [KubeDB Setup Page](https://kubedb.com/docs/v2024.11.18/setup/install/kubedb/)
+   - Click on "Download a FREE license from AppsCode License Server"
+   - Fill in the required fields.
+   - Retrieve the lincense from your email and make the license.txt in suitable path.
+
+   The **Kubernetes Cluster ID** can be found using the following command:
+   ```bash
+   kubectl get ns kube-system -o=jsonpath='{.metadata.uid}'
+   ```
+
+3. To verify that the KubeDB Operator is running:
+   ```bash
+   kubectl --namespace kubedb get pods
+   ```
+
+### 3. Install the MariaDB Cluster
+
+1. Navigate to the `mydbcluster-helm` directory:
+   ```bash
+   cd mydbcluster-helm
+   ```
+
+2. Install the MariaDB cluster using Helm:
+   ```bash
+   helm install -f values.yaml -n demo mydbcluster .
+   ```
+
+   Alternatively, you can use this command if you prefer to install in the `demo` namespace:
+   ```bash
+   helm install -f values.yaml --namespace demo --create-namespace mydbcluster .
+   ```
+
+### 4. Verify the Database Deployment
+
+1. Verify the MariaDB pods are running:
+   ```bash
+   kubectl get pod -n demo
+   ```
+
+   You should see three pods named `data-mydbcluster-mariadb-[0..2]`.
 
