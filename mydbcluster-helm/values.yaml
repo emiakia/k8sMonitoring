@@ -1,0 +1,8 @@
+mariadb:
+  replicaCount: 3
+  version: "10.5.23"
+  storage:
+    storageClass: "gp2"
+    size: "1Gi"
+  namespace: demo
+  deletionPolicy: WipeOut

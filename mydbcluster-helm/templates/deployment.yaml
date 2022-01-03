@@ -1,0 +1,19 @@
+{{- /*
+apiVersion: kubedb.com/v1
+kind: MariaDB
+metadata:
+  name: {{ .Release.Name }}-mariadb
+  namespace: {{ .Values.mariadb.namespace }}
+spec:
+  version: "{{ .Values.mariadb.version }}"
+  replicas: {{ .Values.mariadb.replicaCount }}
+  storageType: Durable
+  storage:
+    storageClassName: "{{ .Values.mariadb.storage.storageClass }}"
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: {{ .Values.mariadb.storage.size }}
+  deletionPolicy: {{ .Values.mariadb.deletionPolicy }}
+*/ -}}
