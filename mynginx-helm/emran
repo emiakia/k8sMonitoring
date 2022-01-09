@@ -1,0 +1,108 @@
+---
+# Source: nginx/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-chart-nginx
+  labels:
+    helm.sh/chart: nginx-0.1.0
+    app.kubernetes.io/name: nginx
+    app.kubernetes.io/instance: my-chart
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: nginx
+    app.kubernetes.io/instance: my-chart
+---
+# Source: nginx/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-chart-nginx
+  labels:
+    helm.sh/chart: nginx-0.1.0
+    app.kubernetes.io/name: nginx
+    app.kubernetes.io/instance: my-chart
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: nginx
+      app.kubernetes.io/instance: my-chart
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: nginx
+        app.kubernetes.io/instance: my-chart
+    spec:
+      serviceAccountName: default
+      securityContext:
+        {}
+      initContainers:
+      - name: init-modify-host
+        image: 'docker.mofid.dev/busybox:latest'
+        command: ["/bin/sh","-c"]
+        args:
+        - |
+          POD_NAME=$(hostname);
+          SERVING_HOST="Host-${POD_NAME: -5}";
+          echo "serving-host=${SERVING_HOST}" > /usr/share/nginx/html/index.html;
+        volumeMounts:
+          - mountPath: /usr/share/nginx/html
+            name: html-volume
+      containers:
+        - name: nginx
+          securityContext:
+            {}
+          image: "docker.mofid.dev/nginx:1.16.0"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {}
+          volumeMounts:
+            - mountPath: /usr/share/nginx/html
+              name: html-volume
+      volumes:
+        - emptyDir: {}
+          name: html-volume
+---
+# Source: nginx/templates/tests/test-connection.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "my-chart-nginx-test-connection"
+  labels:
+    helm.sh/chart: nginx-0.1.0
+    app.kubernetes.io/name: nginx
+    app.kubernetes.io/instance: my-chart
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['my-chart-nginx:80']
+  restartPolicy: Never
