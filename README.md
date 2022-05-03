@@ -305,7 +305,7 @@ Before deploying the monitoring system, ensure you have the following:
 - **kubectl** command-line tool installed and configured for your cluster
 - **Helm** installed on your local machine
 - AWS Access Key and Secret Key for interacting with AWS services
-- A valid GitHub Container Registry token for pulling Docker images from a private repository
+- A valid GitHub Container Registry token for pulling Docker images from your private repository
 
 ## Steps
 
@@ -363,12 +363,13 @@ kubectl get pod -n demo
 ```
 
 Check Logs
-To troubleshoot or verify that the application is running as expected, check the logs of the deployed pods:
-
+To check the functionality of the application, issue the command below to verify that it is running as expected. You can also check the logs of the deployed pods:
 ```bash
 kubectl logs -f <pod-name> -n demo
 ```
 Replace <pod-name> with the actual pod name.
+
+You can delete any other pod or deploy a different deployment to verify the functionality.
 
 ### Explanation:
 - The **Prerequisites** section lists the requirements for running the monitoring setup.
