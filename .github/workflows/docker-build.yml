@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+  release:
+    types:
+      - published
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -25,10 +28,14 @@ jobs:
       # Build the Docker image
       - name: Build Docker image
         run: |
+          TAG=${{ env.RELEASE_VERSION || 'latest' }}
+          docker build -t ghcr.io/${{ github.repository_owner }}/k8s-monitoring-app:${TAG} .
           docker build -t ghcr.io/${{ github.repository_owner }}/k8s-monitoring-app:latest .
 
       # Push the Docker image
       - name: Push Docker image
         run: |
+          TAG=${{ env.RELEASE_VERSION || 'latest' }}
+          docker push ghcr.io/${{ github.repository_owner }}/k8s-monitoring-app:${TAG}
           docker push ghcr.io/${{ github.repository_owner }}/k8s-monitoring-app:latest
 
