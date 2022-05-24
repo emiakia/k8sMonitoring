@@ -17,6 +17,7 @@ The deployment is managed via Helm charts, ensuring repeatability and efficiency
    - Multi-replica web server setup using Nginx.
    - Custom web server configuration mounted to pods.
    - A variable updated in an init container which shows a custom value.
+   - The custom homepage can be accessed via a browser using the ALB URL. 
 
 4. **Monitoring**:
    - Custom Golang application monitoring pod lifecycle events.
