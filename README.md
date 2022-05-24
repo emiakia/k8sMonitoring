@@ -377,3 +377,12 @@ You can delete any other pod or deploy a different deployment to verify the func
 - The **Steps** section breaks down how to create necessary secrets for AWS/EKS access, Docker registry, and how to install the Helm chart.
 - **Verifying Deployment** includes commands to check the status and logs of the deployed application.
 - **Troubleshooting** provides tips for debugging issues during the deployment.
+
+### Suggestions for Improvement
+
+1. **Integrate ArgoCD for Deployment**  
+   Use ArgoCD to automate GitOps-based deployments, enabling version control, traceability, and streamlined environment syncs.
+
+2. **Centralized Logging**  
+   Send Golang app logs to **CloudWatch** or **ELK Stack** for better observability, historical tracking, and troubleshooting. Configure logging agents (e.g., FluentD, Filebeat) for seamless integration.
+
