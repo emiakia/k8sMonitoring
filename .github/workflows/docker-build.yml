@@ -42,7 +42,8 @@ jobs:
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           git tag ${{ env.NEXT_VERSION }}
-          git push origin ${{ env.NEXT_VERSION }}
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} ${{ env.NEXT_VERSION }}
+
 
       # Create a release in GitHub
       - name: Create GitHub Release
