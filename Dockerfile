@@ -15,7 +15,7 @@ COPY *.go ./
 
 # Build the application binary with static linking
 RUN CGO_ENABLED=0 GOOS=linux go build -o k8s-monitoring-app
-######################################
+
 # Create the runtime container
 FROM debian:bullseye-slim
 
@@ -29,11 +29,6 @@ RUN apt-get update && apt-get install -y \
     && ./aws/install \
     && rm -rf awscliv2.zip aws/ \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Install necessary packages for running the app
-#UN apt-get update && apt-get install -y \
-#   ca-certificates \
-#   && rm -rf /var/lib/apt/lists/*
 
 # Set the working directory
 WORKDIR /app
