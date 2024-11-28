@@ -210,13 +210,16 @@ Then, follow the same steps to log in to MariaDB and verify that the test databa
 
    ```bash
    mysql -u${MYSQL_ROOT_USERNAME} -p${MYSQL_ROOT_PASSWORD}
+   ```bash
    show databases;
+   ```bash
    use test;
+   ```bash
    select * from t1;
 
 You should see the data inserted in the first pod selected in the second pod.
 
-# Nginx Web Server Deployment
+## Nginx Web Server Deployment
 
 This guide explains how to deploy an Nginx web server on Kubernetes with multiple replicas, each serving a custom page showing the `serving-host` with the last 5 characters of the pod name.
 
