@@ -213,6 +213,7 @@ Then, follow the same steps to log in to MariaDB and verify that the test databa
    show databases;
    use test;
    select * from t1;
+
 You should see the data inserted in the first pod selected in the second pod.
 
 # Nginx Web Server Deployment
@@ -231,54 +232,54 @@ This guide explains how to deploy an Nginx web server on Kubernetes with multipl
 
 Change to the directory where your Helm chart for Nginx is located:
 
-    ```bash
-    cd mynginx-helm
+   ```bash
+   cd mynginx-helm
 
 ### 2. Install the Nginx Helm chart
 Run the following command to install the Nginx web server with the provided values.yaml configuration. This will deploy the web server in the demo namespace.
 
-    ```bash
-    helm install -f values.yaml -n demo mynginx .
+   ```bash
+   helm install -f values.yaml -n demo mynginx .
 
 This command will deploy the Nginx web server with multiple replicas.
 
 ### 3. Check the deployed services
 After the Helm chart is installed, check the services running in the demo namespace to get the external IP of the Nginx service:
 
-    ```bash
-    kubectl get svc -n demo
+   ```bash
+   kubectl get svc -n demo
 Look for the EXTERNAL-IP under the mynginx service, which will be the public URL for accessing the web server.
 
 ### 4. Access the web server from the browser
 Once the external IP is obtained, you can open a web browser and navigate to the following URL (replace the IP with your actual external IP):
 
-    ```bash
-    http://<external-ip>/
+   ```bash
+   http://<external-ip>/
 
 For example:
 
-    ```bash
-    http://a5c1552afd4254ee2a385474f5e6f685-450644057.eu-central-1.elb.amazonaws.com/
+   ```bash
+   http://a5c1552afd4254ee2a385474f5e6f685-450644057.eu-central-1.elb.amazonaws.com/
 
 ### 5. Verify the page content
 Once you access the page, you should see something like:
 
-    ```bash
-    serving-host=Host-p75lk
+   ```bash
+   serving-host=Host-p75lk
 
 Where p75lk represents the last 5 characters of the pod name, which is unique to each pod replica.
 
 ### Troubleshooting
 Ensure that the Nginx service is correctly exposed with the proper external IP.
 If the page doesn't load, verify the pod and service status using:
-    ```bash
-    kubectl get pods -n demo
-    kubectl get svc -n demo
+   ```bash
+   kubectl get pods -n demo
+   kubectl get svc -n demo
 
 ### Cleanup
 To delete the deployment, you can run the following command:
 
-    ```bash
-    helm uninstall -n demo mynginx
+   ```bash
+   helm uninstall -n demo mynginx
 
 This will remove the Nginx web server and associated resources from the demo namespace.
