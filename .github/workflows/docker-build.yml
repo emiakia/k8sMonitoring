@@ -38,8 +38,8 @@ jobs:
       # Create a new Git tag
       - name: Create new Git tag
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          #   git config --global user.name "github-actions[bot]"
+          #   git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           git tag ${{ env.NEXT_VERSION }}
           git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} ${{ env.NEXT_VERSION }}
@@ -49,6 +49,7 @@ jobs:
       - name: Create GitHub Release
         uses: actions/create-release@v1
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           tag_name: ${{ env.NEXT_VERSION }}
           release_name: ${{ env.NEXT_VERSION }}
           body: |
