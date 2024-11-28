@@ -206,17 +206,15 @@ To verify your MariaDB cluster setup and ensure that data is consistent across n
 
    ```bash
    kubectl exec -it -n demo data-mydbcluster-mariadb-1 -- bash
+   ```
 Then, follow the same steps to log in to MariaDB and verify that the test database and its data exist.
 
    ```bash
    mysql -u${MYSQL_ROOT_USERNAME} -p${MYSQL_ROOT_PASSWORD}
-   ```bash
    show databases;
-   ```bash
    use test;
-   ```bash
    select * from t1;
-
+   ```
 You should see the data inserted in the first pod selected in the second pod.
 
 ## Nginx Web Server Deployment
