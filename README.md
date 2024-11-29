@@ -153,12 +153,8 @@ To begin, install Helm by following the official installation instructions for y
 
 2. Install the MariaDB cluster using Helm:
    ```bash
+   kubectl create ns demo
    helm install -f values.yaml -n demo mydbcluster .
-   ```
-
-   Alternatively, you can use this command if you prefer to install in the `demo` namespace:
-   ```bash
-   helm install -f values.yaml --namespace demo --create-namespace mydbcluster .
    ```
 
 ### 4. Verify the Database Deployment
