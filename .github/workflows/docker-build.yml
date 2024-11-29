@@ -28,6 +28,7 @@ jobs:
           PATCH=$((PATCH+2))
           NEXT_VERSION="v$MAJOR.$MINOR.$PATCH"
 
+          echo ${TAG#v}
           echo "NEXT_VERSION=$NEXT_VERSION" >> $GITHUB_ENV
 
       # Create a new Git tag
