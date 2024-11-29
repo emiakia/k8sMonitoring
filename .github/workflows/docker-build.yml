@@ -42,7 +42,7 @@ jobs:
       - name: Create release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NEXT_VERSION: ${{ env.NEXT_VERSION }}
+          NEXT_VERSION: ${NEXT_VERSION}
         run: |
           gh release create "$NEXT_VERSION" \
               --repo="$GITHUB_REPOSITORY" \
