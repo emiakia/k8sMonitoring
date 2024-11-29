@@ -29,6 +29,7 @@ jobs:
           PATCH=$((PATCH+1))
           NEXT_VERSION="v$PATCH"
 
+
           echo ${TAG#v}
           echo "NEXT_VERSION=$NEXT_VERSION" >> $GITHUB_ENV
 
