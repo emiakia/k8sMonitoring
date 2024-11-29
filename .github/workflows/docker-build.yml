@@ -45,6 +45,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NEXT_VERSION: ${{ env.NEXT_VERSION }}
         run: |
+          echo $NEXT_VERSION
+          echo ${{ env.NEXT_VERSION }}
           gh release create "$NEXT_VERSION" \
               --repo="$GITHUB_REPOSITORY" \
               --title="${GITHUB_REPOSITORY#*/} ${NEXT_VERSION#v}" \
