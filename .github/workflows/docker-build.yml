@@ -25,9 +25,9 @@ jobs:
           # Get the latest tag and increment the patch version
           TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
           #IFS='.' read -r MAJOR MINOR PATCH <<< "${TAG#v}"
-          IFS='.' read -r MAJOR MINOR PATCH <<< "${{ env.NEXT_VERSION }}#v}"
-          PATCH=$((PATCH+2))
-          NEXT_VERSION="v$MAJOR.$MINOR.$PATCH"
+          IFS='.' read -r  PATCH PATCH <<< "${{ env.NEXT_VERSION }}"
+          PATCH=$((PATCH+1))
+          NEXT_VERSION="v$PATCH"
 
           echo ${TAG#v}
           echo "NEXT_VERSION=$NEXT_VERSION" >> $GITHUB_ENV
