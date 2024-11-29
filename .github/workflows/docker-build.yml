@@ -32,3 +32,4 @@ jobs:
         run: |
           docker push ghcr.io/${{ github.repository_owner }}/k8s-monitoring-app:latest
 
+
