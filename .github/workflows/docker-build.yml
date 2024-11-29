@@ -30,7 +30,6 @@ jobs:
 
           echo "NEXT_VERSION=$NEXT_VERSION" >> $GITHUB_ENV
 
-
       # Create a new Git tag
       - name: Create Git tag
         run: |
