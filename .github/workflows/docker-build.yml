@@ -41,7 +41,7 @@ jobs:
       - name: Create GitHub Release
         uses: actions/create-release@v1
         with:
-          auth_token: ${{ secrets.GITHUB_TOKEN }}
+          opts.auth: ${{ secrets.GITHUB_TOKEN }}
           tag_name: ${{ env.NEXT_VERSION }}
           release_name: ${{ env.NEXT_VERSION }}
           body: |
