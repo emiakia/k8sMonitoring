@@ -38,8 +38,16 @@ jobs:
       # Create a new Git tag
       - name: Create new Git tag
         run: |
-          git tag ${{ env.NEXT_VERSION }}
-          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} ${{ env.NEXT_VERSION }}
+          git fetch --tags  # Fetch all tags to ensure we're checking the latest
+          TAG_EXISTS=$(git tag -l "v${{ env.NEXT_VERSION }}")
+          if [ -z "$TAG_EXISTS" ]; then
+            git config --global user.name "github-actions[bot]"
+            git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git tag ${{ env.NEXT_VERSION }}
+            git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} ${{ env.NEXT_VERSION }}
+          else
+            echo "Tag v${{ env.NEXT_VERSION }} already exists. Skipping tag creation."
+          fi
 
 
       # Create a release in GitHub
