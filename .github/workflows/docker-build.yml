@@ -22,43 +22,15 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GTH_TOKEN }}
 
-      # Fetch the latest tag and increment it
-      - name: Get the latest tag
-        id: tag
-        run: |
-          # Fetch all tags to get the latest
-          git fetch --tags
-          # Get the latest tag (assuming tags are numbers like v1, v2, v3, etc.)
-          latest_tag=$(git describe --tags --abbrev=0 || echo "v0")
-          # Increment the version (strip "v" and increment the number)
-          version_number=$(echo $latest_tag | sed 's/v//')
-          new_version_number=$((version_number + 1))
-          # Create the new tag (v2, v3, etc.)
-          new_tag="v$new_version_number"
-          
-          # Ensure the new tag is unique
-          while git rev-parse "$new_tag" >/dev/null 2>&1; do
-            new_version_number=$((new_version_number + 1))
-            new_tag="v$new_version_number"
-          done
-          
-          echo "New tag: $new_tag"
-          echo "::set-output name=new_tag::$new_tag"
-
-      # Build the Docker image with the new tag
+      # Build the Docker image
       - name: Build Docker image
         run: |
-          docker build -t ghcr.io/${{ github.repository_owner }}/k8s-monitoring-app:${{ steps.tag.outputs.new_tag }} .
+          docker build -t ghcr.io/${{ github.repository_owner }}/k8s-monitoring-app:latest .
 
       # Push the Docker image
       - name: Push Docker image
         run: |
-          docker push ghcr.io/${{ github.repository_owner }}/k8s-monitoring-app:${{ steps.tag.outputs.new_tag }}
+          docker push ghcr.io/${{ github.repository_owner }}/k8s-monitoring-app:latest
 
-      # Create and push the new git tag
-      - name: Create and push new git tag
-        run: |
-          git tag ${{ steps.tag.outputs.new_tag }}
-          git push origin ${{ steps.tag.outputs.new_tag }}
 
 
