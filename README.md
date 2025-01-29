@@ -174,7 +174,7 @@ To verify your MariaDB cluster setup and ensure that data is consistent across n
    Use the following `kubectl exec` command to access the first MariaDB node:
 
    ```bash
-   kubectl exec -it -n demo data-mydbcluster-mariadb-0 -- bash
+   kubectl exec -it -n demo mydbcluster-mariadb-0 -- bash
 
 2. **Login to MariaDB: Once inside the pod, log in to the MariaDB instance with the root credentials:**
 
